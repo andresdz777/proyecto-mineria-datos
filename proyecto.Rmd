@@ -73,8 +73,6 @@ datamsc
 
 ```{r}
 
-
-
 datamigracion <- datamigracion[ , !(names(datamigracion) %in% c("PEA"))]
 datamigracion <- datamigracion[ , !(names(datamigracion) %in% c("POCUPA"))]
 datamigracion <- datamigracion[ , !(names(datamigracion) %in% c("PEI"))]
@@ -94,7 +92,6 @@ datamsc2
 ```
 
 ```{r}
-
 datamigracion2 <- datamigracion2[ , !(names(datamigracion2) %in% c("PEA"))]
 datamigracion2 <- datamigracion2[ , !(names(datamigracion2) %in% c("POCUPA"))]
 datamigracion2 <- datamigracion2[ , !(names(datamigracion2) %in% c("PEI"))]
@@ -129,8 +126,6 @@ inspect(head(sort(reglas, by = "lift"), 20))
 ```
 ```{r}
 
-#FILA 9 LO QUE TIENE MAYOR CONTEO DE VIOLENCIA A LAS PERSONAS SON  AMENAZAS YA SEA POR FAMILIARES O DESCONOCIDOS YA SEA EN CASA O EN EL TRABAJO
-
 datamsc <- subset(data, P02A02 >= 10)
 
 datamsc2 <- datamsc[, c(10,15, 16)]
@@ -151,7 +146,6 @@ reglas <- fim4r(datamsc2, method = "fpgrowth", target = "rules", supp = .1, conf
 inspect(reglas[])
 ```
 ```{r}
-
 
 datamsc <- subset(data, P02A01 == 1)
 
