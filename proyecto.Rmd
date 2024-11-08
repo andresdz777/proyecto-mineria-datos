@@ -28,7 +28,6 @@ datamigracion2 <- read.csv('migracion2.csv', sep=",")
 
 
 ```{r}
-#REGLA 1 APRIORI LAS PERSONAS CON POBREZA EXTREMA EN EL AREA RURAL NACIONAL SE ENFOCAN PRODUCTOS DE LIMPIEZA PERSONAL CON PRECIOS DE 30 a 500
 
 datagastos <- datagastos[ , !(names(datagastos) %in% c("PEA"))]
 datagastos <- datagastos[ , !(names(datagastos) %in% c("POCUPA"))]
@@ -50,8 +49,6 @@ datamsc2
 
 ```
 ```{r}
-
-#REGLA 222 LAS PERSONAS QUE NO SON POBRES PRIORITIZAN OTRAS COSAS COMO LA DIVERSION
 
 datagastos <- datagastos[ , !(names(datagastos) %in% c("PEA"))]
 datagastos <- datagastos[ , !(names(datagastos) %in% c("POCUPA"))]
@@ -75,7 +72,7 @@ datamsc
 ```
 
 ```{r}
-#REGLA 333 FILA 9 las personas que mas tienen familiares viviendo en el exterior son de los deptos que estan con frontera a MX https://lahora.gt/nacionales/lucero_sapalu/2023/05/13/estos-son-los-cinco-departamentos-con-mayores-indices-de-migracion/
+
 
 
 datamigracion <- datamigracion[ , !(names(datamigracion) %in% c("PEA"))]
@@ -97,8 +94,6 @@ datamsc2
 ```
 
 ```{r}
-#REGLA 444 LOS HOMBRES Y MUJERES QUE NO SON POBRES DEL DOMINIO URBANO METROPOLITANO EN SU MAYORIA EMIGRAN ES A NORTE AMERICA O ALREDEDOR DE CENTROAMERICA
-
 
 datamigracion2 <- datamigracion2[ , !(names(datamigracion2) %in% c("PEA"))]
 datamigracion2 <- datamigracion2[ , !(names(datamigracion2) %in% c("POCUPA"))]
@@ -124,11 +119,6 @@ datamsc3
 
 ```{r}
 
-#REGLA 1 FPGROTH
-
-# LAS PERSONAS QUE  AL SALIR DE UN BANCO O CAJERO SON VICTIMAS DE ESTAFA O FRAUDE, ESTO ES CURIOSO PORQUE LA CREENCIA POPULAR O ALGO QUE PASA ANTES ERA LOS ROBOS A MANO ARMADA y NO DENUNCIARON DEBIDO A QUE LAS PERSONAS TIENEN LA PERCEPCION QUE LAS AUTORIDADES NO AYUDARAN
-
-
 datamsc <- subset(data, P02A04B == 6)
 
 datamsc2 <- datamsc[, c(10,11,23)]
@@ -138,7 +128,6 @@ reglas <- fim4r(datamsc2, method = "fpgrowth", target = "rules", supp = .2, conf
 inspect(head(sort(reglas, by = "lift"), 20))
 ```
 ```{r}
-#REGLA 22 FPGROTH
 
 #FILA 9 LO QUE TIENE MAYOR CONTEO DE VIOLENCIA A LAS PERSONAS SON  AMENAZAS YA SEA POR FAMILIARES O DESCONOCIDOS YA SEA EN CASA O EN EL TRABAJO
 
@@ -152,8 +141,7 @@ inspect(reglas[])
 ```
 
 ```{r}
-#REGLA 333 FPGROTH
-#FILA 18 PARA LOS LUGARES NO POBRES DEL PAIS Y ALGUNOS DEPTOS QUE ESTAN ALREDEDOR DE LA CIUDAD COMO CHIMALTENANGO, EL PROGRESO Y SACATEPEQUEZ LOS PRINCIPALES ACTOS DE VIOLENCIA SON ROBOSY DAÑOS A LA PROPIEDAD PRIVADA
+
 datamsc <- subset(data, POBREZA == 3)
 
 datamsc2 <- datamsc[, c(10,1,13, 15, 16)]
@@ -163,9 +151,6 @@ reglas <- fim4r(datamsc2, method = "fpgrowth", target = "rules", supp = .1, conf
 inspect(reglas[])
 ```
 ```{r}
-#REGLA 4444 FPGROTH
-
-# FILA 2 las personas que sufren algun tipo de violencia y  no realizan las denuncias en su mayoria es debido a la falta de credibilidad en los procesos, falta de conocimiento y miedo 
 
 
 datamsc <- subset(data, P02A01 == 1)
