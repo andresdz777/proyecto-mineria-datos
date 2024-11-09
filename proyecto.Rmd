@@ -1,12 +1,11 @@
 ---
-title: "R Notebook"
+title: "RProyecto Mineria Andres Diaz 999013647"
 output: html_notebook
 ---
 
 
-
 ```{r}
-
+library(ggplot2)
 library(arules)
 
 data <- read.csv('violenciav2.csv', sep=",")
@@ -26,6 +25,7 @@ datamigracion2 <- read.csv('migracion2.csv', sep=",")
 
 
 ```{r}
+#REGLA 1 APRIORI 
 
 datagastos <- datagastos[ , !(names(datagastos) %in% c("PEA"))]
 datagastos <- datagastos[ , !(names(datagastos) %in% c("POCUPA"))]
@@ -37,16 +37,30 @@ datamsc <- subset(datamsc, DOMINIO == 3)
 
 datamsc <- subset(datamsc, POBREZA == 1)
 
-datamsc2 <- datamsc[, c(5,10,11,13)]
+datamsc2 <- datamsc[, c(5,10,13)]
 
 reglas <- apriori(datamsc2, parameter = list(support=0.3, confidence=0.3))
 
 inspect(head(sort(reglas, by = "lift", decreasing = TRUE), 50))
 
+
+datamsc2 <- na.omit(datamsc2)
+
 datamsc2
+
+cluster <- kmeans(datamsc2, centers=2)
+
+ggplot(datamsc2, aes(x=ID_GASTOSMP ,y=P13B06, color = as.factor(cluster$cluster)))+
+  geom_point()+
+  geom_point(data = as.data.frame(cluster$centers), aes(x=ID_GASTOSMP ,y=P13B06), , color="black", size =4, shape=17)+
+  labs(title = "ID GASTO VS vs ¿Cuánto gastaron en total durante el mes pasado en (...)?")+
+  theme_minimal()
+
 
 ```
 ```{r}
+
+#REGLA 2 APRIORI 
 
 datagastos <- datagastos[ , !(names(datagastos) %in% c("PEA"))]
 datagastos <- datagastos[ , !(names(datagastos) %in% c("POCUPA"))]
@@ -64,12 +78,24 @@ reglas <- apriori(datamsc2, parameter = list(support=0.3, confidence=0.3))
 
 inspect(head(sort(reglas, by = "lift", decreasing = TRUE), 20))
 
-datamsc
+datamsc2
+
+datamsc2 <- na.omit(datamsc2)
+
+cluster <- kmeans(datamsc2, centers=2)
+
+ggplot(datamsc2, aes(x=ID_GASTOSMP ,y=P13B06, color = as.factor(cluster$cluster)))+
+  geom_point()+
+  geom_point(data = as.data.frame(cluster$centers), aes(x=ID_GASTOSMP ,y=P13B06), , color="black", size =4, shape=17)+
+  labs(title = "ID GASTO VS vs ¿Cuánto gastaron en total durante el mes pasado en (...)?")+
+  theme_minimal()
 
 
 ```
 
 ```{r}
+#REGLA 3 APRIORI  https://lahora.gt/nacionales/lucero_sapalu/2023/05/13/estos-son-los-cinco-departamentos-con-mayores-indices-de-migracion/
+
 
 datamigracion <- datamigracion[ , !(names(datamigracion) %in% c("PEA"))]
 datamigracion <- datamigracion[ , !(names(datamigracion) %in% c("POCUPA"))]
@@ -86,10 +112,21 @@ inspect(head(sort(reglas, by = "lift", decreasing = TRUE), 20))
 
 datamsc2
 
+cluster <- kmeans(datamsc2, centers=3)
+
+ggplot(datamsc2, aes(x=P01I01B ,y=DEPTO, color = as.factor(cluster$cluster)))+
+  geom_point()+
+  geom_point(data = as.data.frame(cluster$centers), aes(x=P01I01B ,y=DEPTO), , color="black", size =4, shape=17)+
+  labs(title = "DEPTO vs ¿Cuántas personas del hogar vive actualmente en otro país ahora?")+
+  theme_minimal()
+
 
 ```
 
 ```{r}
+#REGLA 4 APRIORI
+
+
 datamigracion2 <- datamigracion2[ , !(names(datamigracion2) %in% c("PEA"))]
 datamigracion2 <- datamigracion2[ , !(names(datamigracion2) %in% c("POCUPA"))]
 datamigracion2 <- datamigracion2[ , !(names(datamigracion2) %in% c("PEI"))]
@@ -104,7 +141,16 @@ reglas <- apriori(datamsc2, parameter = list(support=0.3, confidence=0.3))
 
 inspect(head(sort(reglas, by = "lift", decreasing = TRUE), 60))
 
+datamsc3 <- na.omit(datamsc3)
+
 datamsc3
+cluster <- kmeans(datamsc3, centers=3)
+
+ggplot(datamsc3, aes(x=P01I03 ,y=P01I05, color = as.factor(cluster$cluster)))+
+  geom_point()+
+  geom_point(data = as.data.frame(cluster$centers), aes(x=P01I03 ,y=P01I05), , color="black", size =4, shape=17)+
+  labs(title = "DEPTOvs ¿Cuántas personas del hogar vive actualmente en otro país ahora?")+
+  theme_minimal()
 
 ```
 
@@ -113,16 +159,37 @@ datamsc3
 
 
 ```{r}
+
+#REGLA 1 FPGROTH
+
 
 datamsc <- subset(data, P02A04B == 6)
 
 datamsc2 <- datamsc[, c(10,11,23)]
 
+datamsc3 <- datamsc[, c(10,23)]
+
 reglas <- fim4r(datamsc2, method = "fpgrowth", target = "rules", supp = .2, conf = .2)
 
 inspect(head(sort(reglas, by = "lift"), 20))
+
+
+datamsc3 <- na.omit(datamsc3)
+datamsc2
+cluster <- kmeans(datamsc3, centers=3)
+
+
+ggplot(datamsc3, aes(x=ID_SEGURIDAD ,y=P02A07., color = as.factor(cluster$cluster)))+
+  geom_point()+
+  geom_point(data = as.data.frame(cluster$centers), aes(x=ID_SEGURIDAD ,y=P02A07.), , color="black", size =4, shape=17)+
+  labs(title = "ID Seguridad VS Cuál fue la razón principal para no presentar la denuncia")+
+  theme_minimal()
+
+
+
 ```
 ```{r}
+#REGLA 2 FPGROTH
 
 datamsc <- subset(data, P02A02 >= 10)
 
@@ -131,10 +198,25 @@ datamsc2 <- datamsc[, c(10,15, 16)]
 reglas <- fim4r(datamsc2, method = "fpgrowth", target = "rules", supp = .2, conf = .2)
 
 inspect(reglas[])
+
+
+datamsc2 <- na.omit(datamsc2)
+datamsc2
+cluster <- kmeans(datamsc2, centers=3)
+
+
+ggplot(datamsc2, aes(x=ID_SEGURIDAD ,y=P02A04B, color = as.factor(cluster$cluster)))+
+  geom_point()+
+  geom_point(data = as.data.frame(cluster$centers), aes(x=ID_SEGURIDAD ,y=P02A04B), , color="black", size =4, shape=17)+
+  labs(title = "ID Seguridad VS Dónde se encontraba cuando fue víctima")+
+  theme_minimal()
+
+
+
 ```
 
 ```{r}
-
+#REGLA 3 FPGROTH
 datamsc <- subset(data, POBREZA == 3)
 
 datamsc2 <- datamsc[, c(10,1,13, 15, 16)]
@@ -142,8 +224,22 @@ datamsc2 <- datamsc[, c(10,1,13, 15, 16)]
 reglas <- fim4r(datamsc2, method = "fpgrowth", target = "rules", supp = .1, conf = .1)
 
 inspect(reglas[])
+
+
+datamsc2 <- na.omit(datamsc2)
+datamsc2
+cluster <- kmeans(datamsc2, centers=3)
+
+ggplot(datamsc2, aes(x=ID_SEGURIDAD ,y=DEPTO, color = as.factor(cluster$cluster)))+
+  geom_point()+
+  geom_point(data = as.data.frame(cluster$centers), aes(x=ID_SEGURIDAD ,y=DEPTO), , color="black", size =4, shape=17)+
+  labs(title = "ID_Seguridad VS Departamento")+
+  theme_minimal()
+
 ```
 ```{r}
+#REGLA 4 FPGROTH
+
 
 datamsc <- subset(data, P02A01 == 1)
 
@@ -152,4 +248,17 @@ datamsc2 <- datamsc[, c(1,10, 23)]
 reglas <- fim4r(datamsc2, method = "fpgrowth", target = "rules", supp = .2, conf = .2)
 
 inspect(head(sort(reglas, by = "lift"), 10))
+
+
+
+datamsc2 <- na.omit(datamsc2)
+datamsc2
+cluster <- kmeans(datamsc2, centers=2)
+
+ggplot(datamsc2, aes(x=ID_SEGURIDAD ,y=P02A07., color = as.factor(cluster$cluster)))+
+  geom_point()+
+  geom_point(data = as.data.frame(cluster$centers), aes(x=ID_SEGURIDAD ,y=P02A07.), , color="black", size =4, shape=17)+
+  labs(title = "ID Seguridad VS ¿Cuál fue la razón principal para no presentar la denuncia")+
+  theme_minimal()
+
 ```
