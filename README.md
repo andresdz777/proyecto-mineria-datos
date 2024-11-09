@@ -21,7 +21,7 @@ El archivo R esta conformado de chunks siendo el primero la carga de datos los s
 
 Cada regla Apriori y FP-Growth tiene un cluster K-Means por si se desea graficar o indicar en cada chunk
 
-
+```
 
 # Cargar bibliotecas necesarias
 library(ggplot2)
@@ -220,3 +220,5 @@ ggplot(datamsc2, aes(x=ID_SEGURIDAD ,y=P02A04B, color = as.factor(cluster$cluste
   labs(title = "ID Seguridad VS Cuál fue la razón principal para no presentar la denuncia")+
   theme_minimal()
 
+
+```
