@@ -220,5 +220,33 @@ ggplot(datamsc2, aes(x=ID_SEGURIDAD ,y=P02A04B, color = as.factor(cluster$cluste
   labs(title = "ID Seguridad VS Cuál fue la razón principal para no presentar la denuncia")+
   theme_minimal()
 
+# REGLA 3 FPGROTH
+datamsc <- subset(data, POBREZA == 3)  # Filtra datos donde POBREZA es 3
+datamsc2 <- datamsc[, c(10, 1, 13, 15, 16)]  # Selecciona columnas específicas
+reglas <- fim4r(datamsc2, method = "fpgrowth", target = "rules", supp = .1, conf = .1)  # Aplica fpgrowth para encontrar reglas
+inspect(reglas[])  # Muestra las reglas generadas
+datamsc2 <- na.omit(datamsc2)  # Elimina valores faltantes
+datamsc2  # Muestra datos sin NA
+cluster <- kmeans(datamsc2, centers=3)  # Realiza clustering con 3 centros
+ggplot(datamsc2, aes(x=ID_SEGURIDAD ,y=DEPTO, color = as.factor(cluster$cluster))) +  # Gráfico de dispersión por clúster
+  geom_point() + 
+  geom_point(data = as.data.frame(cluster$centers), aes(x=ID_SEGURIDAD ,y=DEPTO), color="black", size = 4, shape = 17) +  # Centros de los clústeres
+  labs(title = "ID_Seguridad VS Departamento") + 
+  theme_minimal()  # Estilo minimalista
+
+# REGLA 4 FPGROTH
+datamsc <- subset(data, P02A01 == 1)  # Filtra datos donde P02A01 es 1
+datamsc2 <- datamsc[, c(1, 10, 23)]  # Selecciona columnas específicas
+reglas <- fim4r(datamsc2, method = "fpgrowth", target = "rules", supp = .2, conf = .2)  # Aplica fpgrowth para encontrar reglas
+inspect(head(sort(reglas, by = "lift"), 10))  # Muestra las 10 reglas con mayor lift
+datamsc2 <- na.omit(datamsc2)  # Elimina valores faltantes
+datamsc2  # Muestra datos sin NA
+cluster <- kmeans(datamsc2, centers=2)  # Realiza clustering con 2 centros
+ggplot(datamsc2, aes(x=ID_SEGURIDAD ,y=P02A07., color = as.factor(cluster$cluster))) +  # Gráfico de dispersión por clúster
+  geom_point() + 
+  geom_point(data = as.data.frame(cluster$centers), aes(x=ID_SEGURIDAD ,y=P02A07.), color="black", size = 4, shape = 17) +  # Centros de los clústeres
+  labs(title = "ID Seguridad VS ¿Cuál fue la razón principal para no presentar la denuncia") + 
+  theme_minimal()  # Estilo minimalista
+
 
 ```
