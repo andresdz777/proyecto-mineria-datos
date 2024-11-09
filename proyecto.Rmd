@@ -1,5 +1,5 @@
 ---
-title: "RProyecto Mineria Andres Diaz 999013647"
+title: "Proyecto Mineria Andres Diaz 999013647"
 output: html_notebook
 ---
 
