@@ -262,3 +262,25 @@ ggplot(datamsc2, aes(x=ID_SEGURIDAD ,y=P02A07., color = as.factor(cluster$cluste
   theme_minimal()
 
 ```
+
+```{r}
+#CLUSTER
+datamsc <- subset(data, POBREZA == 3)
+
+datamsc2 <- datamsc[, c(10,1,13, 15, 16)]
+
+reglas <- fim4r(datamsc2, method = "fpgrowth", target = "rules", supp = .1, conf = .1)
+
+inspect(reglas[])
+
+
+datamsc2 <- na.omit(datamsc2)
+datamsc2
+cluster <- kmeans(datamsc2, centers=3)
+
+ggplot(datamsc2, aes(x=P02A02 ,y=DEPTO, color = as.factor(cluster$cluster)))+
+  geom_point()+
+  geom_point(data = as.data.frame(cluster$centers), aes(x=P02A02 ,y=DEPTO), , color="black", size =4, shape=17)+
+  labs(title = "Cuantas veces fue victima VS Departamento")+
+  theme_minimal()
+```
