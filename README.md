@@ -16,3 +16,7 @@ se debe de tener en consideracion que para las reglas FP-GROWTH se tiene que ins
 # 4. Conformacion del archivo R
 
 El archivo R esta conformado de chunks siendo el primero la carga de datos los siguientes 4 las reglas apriori y los siguientes 4 las reglas FP-Growth
+
+# Consideraciones extras
+
+Cada regla Apriori y FP-Growth tiene un cluster K-Means por si se desea graficar o indicar en cada chunk
