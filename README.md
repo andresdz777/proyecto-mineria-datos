@@ -248,5 +248,33 @@ ggplot(datamsc2, aes(x=ID_SEGURIDAD ,y=P02A07., color = as.factor(cluster$cluste
   labs(title = "ID Seguridad VS ¿Cuál fue la razón principal para no presentar la denuncia") + 
   theme_minimal()  # Estilo minimalista
 
+#CLUSTER
+# Filtra datos donde POBREZA es 3
+datamsc <- subset(data, POBREZA == 3)
 
+# Selecciona columnas específicas
+datamsc2 <- datamsc[, c(10, 1, 13, 15, 16)]
+
+# Aplica fpgrowth para encontrar reglas
+reglas <- fim4r(datamsc2, method = "fpgrowth", target = "rules", supp = .1, conf = .1)
+
+# Muestra las reglas generadas
+inspect(reglas[])
+
+# Elimina valores faltantes
+datamsc2 <- na.omit(datamsc2)
+
+# Muestra datos sin NA
+datamsc2
+
+# Realiza clustering con 3 centros
+cluster <- kmeans(datamsc2, centers=3)
+
+# Gráfico de dispersión por clúster
+ggplot(datamsc2, aes(x=P02A02 ,y=DEPTO, color = as.factor(cluster$cluster))) + 
+  geom_point() + 
+  # Centros de los clústeres
+  geom_point(data = as.data.frame(cluster$centers), aes(x=P02A02 ,y=DEPTO), color="black", size = 4, shape = 17) + 
+  labs(title = "Cuantas veces fue victima VS Departamento") + 
+  theme_minimal()  # Estilo minimalista
 ```
